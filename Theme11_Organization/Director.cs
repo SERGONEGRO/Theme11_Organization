@@ -8,8 +8,8 @@ namespace Theme11_Organization
 {
     class Director:Manager
     {
-        public Director(uint ID, string FirstName, string LastName, byte Age, uint Salary, string Department, byte ProjectsCount)
-           : base(ID, FirstName, LastName, Age, Salary, Department, ProjectsCount)
+        public Director(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
+           : base(ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
         }
 

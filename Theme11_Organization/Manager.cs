@@ -6,10 +6,21 @@ using System.Threading.Tasks;
 
 namespace Theme11_Organization
 {
+
     class Manager:Employee
     {
-        public Manager(uint ID, string FirstName, string LastName, byte Age, uint Salary, string Department, byte ProjectsCount)
-            : base(ID, FirstName, LastName, Age, Salary, Department, ProjectsCount)
+        /// <summary>
+        /// Оплата = 15% от всех, но не меньше 1300
+        /// </summary
+        new public double Salary
+        {
+            get
+            {
+                return salary;
+            }
+        }
+        public Manager(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
+            : base(ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Theme11_Organization
 {
-    class Worker:Employee
+    class Intern:Employee
     {
         /// <summary>
         /// Почасовая оплата
@@ -15,10 +15,7 @@ namespace Theme11_Organization
         {
             get
             {
-                byte workingDays = 25; // Рабочих дней в месяце
-                byte workingHours = 8; // Рабочих часов в день
-                int salaryPerHour = 12; //12$ в час
-                return workingDays * workingHours * salaryPerHour;
+                return 500;    //500$ в месяц
             }
         }
 
@@ -32,15 +29,15 @@ namespace Theme11_Organization
         /// <param name="Salary"></param>
         /// <param name="Department"></param>
         /// <param name="ProjectsCount"></param>
-        public Worker(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
-            :base (ID, FirstName, LastName, Age, Department, ProjectsCount)
+        public Intern(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
+            : base(ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
         }
 
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
-        public Worker() : base() // this(1, "", "", 1, 1, "", 0)
+        public Intern() : base() // this(1, "", "", 1, 1, "", 0)
         {
         }
     }

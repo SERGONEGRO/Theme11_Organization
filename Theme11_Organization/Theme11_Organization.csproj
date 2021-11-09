@@ -49,6 +49,7 @@
     <Compile Include="Department.cs" />
     <Compile Include="Director.cs" />
     <Compile Include="Employee.cs" />
+    <Compile Include="Intern.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

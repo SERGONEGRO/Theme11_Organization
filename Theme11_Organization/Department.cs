@@ -36,7 +36,12 @@ namespace Theme11_Organization
         /// <summary>
         /// Массив с работниками
         /// </summary>
-        public List<Worker> workers;
+        public List<Employee> employees;
+
+        ///// <summary>
+        ///// Массив с интернами
+        ///// </summary>
+        //public List<Intern> interns;
 
         /// <summary>
         /// Заголовки
@@ -94,19 +99,35 @@ namespace Theme11_Organization
             this.depName = $"Department № {depNumber}";
             this.depCreationDate = new DateTime(2020, 03, depNumber);
             this.titles = new string[7] { "id", "Имя", "Фамилия", "Возраст", "Департамент", "Зарплата", "Проектов", };
-            this.workers = new List<Worker>();
-
+            this.employees = new List<Employee>();
+            Random rand = new Random();
             for (int i = 1; i <= empCount; i++)
-            {
-                workers.Add(
-                    new Worker(
-                        (uint)(depNumber * 1000 + i),
-                        $"Имя_{i}",
-                        $"Фамилия_{i}",
-                        (byte)r.Next(20, 100),
-                        (uint)r.Next(10, 20) * 1000,
-                        this.depName,
-                        (byte)r.Next(1, 5)));
+            {   
+                switch (rand.Next(0,2))   //добавляем в департамент рандомно работяг и интернов
+                {
+                    case 0:
+                        employees.Add(
+                             new Worker(
+                            (uint)(depNumber * 1000 + i),
+                             $"Р_Имя_{i}",
+                             $"Фамилия_{i}",
+                             (byte)r.Next(20, 100),
+                            this.depName,
+                            (byte)r.Next(1, 5)));
+                        break;
+
+                    case 1:
+                        employees.Add(
+                             new Intern(
+                            (uint)(depNumber * 1000 + i),
+                             $"И_Имя_{i}",
+                             $"Фамилия_{i}",
+                             (byte)r.Next(20, 100),
+                            this.depName,
+                            (byte)r.Next(1, 5)));
+                        break;
+                }
+               
             }
             this.depManager = new Manager();
 
@@ -119,13 +140,13 @@ namespace Theme11_Organization
         /// <param name="depName">Имя департамента</param>
         /// <param name="depDate">Дата создания</param>
         /// <param name="works">Массив воркеров</param>
-        public Department(int depNumber, string depName, string depDate, List<Worker> works, Manager depMan)
+        public Department(int depNumber, string depName, string depDate, List<Employee> emps, Manager depMan)
         {
             this.depId = depNumber;
             this.depName = depName;
             this.depCreationDate = DateTime.Parse(depDate);
             this.titles = new string[7] { "id", "Имя", "Фамилия", "Возраст", "Департамент", "Зарплата", "Проектов", };
-            this.workers = works;
+            this.employees = emps;
             this.depManager = depMan;
         }
 
@@ -140,44 +161,44 @@ namespace Theme11_Organization
         {
             Console.WriteLine($"\nДепартамент № {depId}, Дата создания: {depCreationDate.ToShortDateString()}, менеджер: {depManager}");
             Console.WriteLine($"{titles[0],3} {titles[1],10} {titles[2],20} {titles[3],10} {titles[4],15}  {titles[5],15} {titles[6],10}");
-            foreach (var item in workers)
+            foreach (var item in employees)
             {
                 Console.WriteLine(item.Print());
             }
         }
 
-        /// <summary>
-        /// Распарсивает JSON строку в массив воркеров
-        /// </summary>
-        /// <param name="s">Строка</param>
-        /// <returns>массив воркеров</returns>
-        public static List<Worker> GetWorkersJSON(string s)
-        {
-            var wrks = JObject.Parse(s)["workers"].ToArray();
+        ///// <summary>
+        ///// Распарсивает JSON строку в массив воркеров
+        ///// </summary>
+        ///// <param name="s">Строка</param>
+        ///// <returns>массив воркеров</returns>
+        //public static List<Employee> GetEmployeesJSON(string s)
+        //{
+        //    var emps = JObject.Parse(s)["employee"].ToArray();
 
-            List<Worker> workers = new List<Worker>();
-            foreach (var item in wrks)
-            {
-                workers.Add(new Worker(Convert.ToUInt32(item["ID"]),
-                                       item["FirstName"].ToString(),
-                                       item["LastName"].ToString(),
-                                       Convert.ToByte(item["Age"]),
-                                       Convert.ToUInt32(item["Salary"]),
-                                       item["Department"].ToString(),
-                                       Convert.ToByte(item["ProjectCount"])));
-            }
-            return workers;
-        }
+        //    List<Employee> employees = new List<Employee>();
+        //    foreach (var item in emps)
+        //    {
+        //        employees.Add(new Employee(Convert.ToUInt32(item["ID"]),
+        //                               item["FirstName"].ToString(),
+        //                               item["LastName"].ToString(),
+        //                               Convert.ToByte(item["Age"]),
+        //                               Convert.ToUInt32(item["Salary"]),
+        //                               item["Department"].ToString(),
+        //                               Convert.ToByte(item["ProjectCount"])));
+        //    }
+        //    return workers;
+        //}
 
         /// <summary>
         /// Сортировка по возрасту
         /// </summary>
         public void OrderDepartmentByAge()
         {
-            List<Worker> result = this.workers;
+            List<Employee> result = this.employees;
 
             result.Sort((b1, b2) => string.Compare(b1.Age.ToString(), b2.Age.ToString()));
-            this.workers = result;
+            this.employees = result;
 
         }
 
@@ -186,10 +207,10 @@ namespace Theme11_Organization
         /// </summary>
         public void OrderDepartmentBySalary()
         {
-            List<Worker> result = this.workers;
+            List<Employee> result = this.employees;
 
             result.Sort((b1, b2) => string.Compare(b1.Salary.ToString(), b2.Salary.ToString()));
-            this.workers = result;
+            this.employees = result;
 
         }
 
@@ -202,7 +223,7 @@ namespace Theme11_Organization
         {
 
             JArray jArray = new JArray();
-            foreach (var w in this.workers)
+            foreach (var w in this.employees)
             {
                 JObject obj = w.SerializeEmployeeToJson();
 
@@ -221,6 +242,11 @@ namespace Theme11_Organization
 
             return jDep;
         }
+
+        //public int ManagerSalaryCalculation()
+        //{
+        //    foreach (e Employee in wor)
+        //}
         #endregion
     }
 }

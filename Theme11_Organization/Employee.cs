@@ -82,18 +82,7 @@ namespace Theme11_Organization
         /// </summary>
         public byte ProjectsCount { get { return this.projectsCount; } set { this.projectsCount = value; } }
 
-        /// <summary>
-        /// Почасовая оплата
-        /// </summary>
-        public double HourRate
-        {
-            get
-            {
-                byte workingDays = 25; // Рабочих дней в месяце
-                byte workingHours = 8; // Рабочих часов в день
-                return ((double)Salary) / workingDays / workingHours;
-            }
-        }
+       
 
         #endregion
 
@@ -109,24 +98,23 @@ namespace Theme11_Organization
         /// <param name="Salary"></param>
         /// <param name="Department"></param>
         /// <param name="ProjectsCount"></param>
-        public Employee(uint ID, string FirstName, string LastName, byte Age, uint Salary, string Department, byte ProjectsCount)
+        public Employee(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
         {
             this.id = ID;
             this.firstName = FirstName;
             this.lastName = LastName;
             this.age = Age;
             this.department = Department;
-            this.salary = Salary;
             this.projectsCount = ProjectsCount;
         }
 
         /// <summary>
         /// создание сотрудника с автопараметрами
         /// </summary>
-        public Employee() : this(1,"","",1,1,"",0)
+        public Employee() : this(1, "", "", 1, "",0)
         {
         }
-       
+
         #endregion
 
         #region Методы
