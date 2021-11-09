@@ -1,4 +1,6 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -123,10 +125,8 @@ namespace Theme11_Organization
         /// </summary>
         public Employee() : this(1,"","",1,1,"",0)
         {
-
         }
-         
-
+       
         #endregion
 
         #region Методы
@@ -141,34 +141,12 @@ namespace Theme11_Organization
 
 
         /// <summary>
-        /// воркер в ХМЛ
+        /// Employee в JSON
         /// </summary>
         /// <returns></returns>
-        public XElement SerializeWorkerToXML()
+        public JObject SerializeEmployeeToJson()
         {
-            XElement xConcreteWorker = new XElement("ConcreteWorker");
-            XAttribute xConcreteWokerId = new XAttribute("Id", this.id);
-            XAttribute xConcreteWokerFirstName = new XAttribute("FirstName", this.firstName);
-            XAttribute xConcreteWokerLastName = new XAttribute("LastName", this.lastName);
-            XAttribute xConcreteWokerAge = new XAttribute("Age", this.age);
-            XAttribute xConcreteWokerDepartment = new XAttribute("Department", this.department);
-            XAttribute xConcreteWokerSalary = new XAttribute("Salary", this.salary);
-            XAttribute xConcreteWokerProjectsCount = new XAttribute("ProjectsCount", this.projectsCount);
-
-            xConcreteWorker.Add(xConcreteWokerId,
-                                xConcreteWokerFirstName,
-                                xConcreteWokerLastName,
-                                xConcreteWokerAge,
-                                xConcreteWokerDepartment,
-                                xConcreteWokerSalary,
-                                xConcreteWokerProjectsCount);
-
-            return xConcreteWorker;
-        }
-
-        public JObject SerializeWorkerToJson()
-        {
-            JObject jWorker = new JObject
+            JObject jEmployee = new JObject
             {
                 ["ID"] = this.Id,
                 ["FirstName"] = this.FirstName,
@@ -178,7 +156,7 @@ namespace Theme11_Organization
                 ["Department"] = this.Department,
                 ["ProjectCount"] = this.ProjectsCount
             };
-            return jWorker;
+            return jEmployee;
         }
 
         #endregion
