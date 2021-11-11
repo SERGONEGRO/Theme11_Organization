@@ -51,7 +51,7 @@ namespace Theme11_Organization
         /// <summary>
         /// Менеджер, закрепленный за департаментом
         /// </summary>
-        public Manager depManager;
+        //public Manager depManager;
 
         #endregion
 
@@ -101,6 +101,7 @@ namespace Theme11_Organization
             this.titles = new string[7] { "id", "Имя", "Фамилия", "Возраст", "Департамент", "Зарплата", "Проектов", };
             this.employees = new List<Employee>();
             Random rand = new Random();
+            
             for (int i = 1; i <= empCount; i++)
             {   
                 switch (rand.Next(0,2))   //добавляем в департамент рандомно работяг и интернов
@@ -129,7 +130,17 @@ namespace Theme11_Organization
                 }
                
             }
-            this.depManager = new Manager();
+            //this.depManager = new Manager((uint)depId, "Manager" + depId,"LastName",(byte)r.Next(20,100),depName,100);
+            employees.Add(
+                new Manager(
+                    (uint)(depNumber * 1000),
+                             $"Manager_{depNumber}",
+                             $"Фамилия_{depNumber}",
+                             (byte)r.Next(20, 100),
+                            this.depName,
+                            ManagerProjectsCountCalculation(),
+                            ManagerSalaryCalculation()));
+           
 
         }
 
@@ -140,14 +151,14 @@ namespace Theme11_Organization
         /// <param name="depName">Имя департамента</param>
         /// <param name="depDate">Дата создания</param>
         /// <param name="works">Массив воркеров</param>
-        public Department(int depNumber, string depName, string depDate, List<Employee> emps, Manager depMan)
+        public Department(int depNumber, string depName, string depDate, List<Employee> emps)
         {
             this.depId = depNumber;
             this.depName = depName;
             this.depCreationDate = DateTime.Parse(depDate);
             this.titles = new string[7] { "id", "Имя", "Фамилия", "Возраст", "Департамент", "Зарплата", "Проектов", };
             this.employees = emps;
-            this.depManager = depMan;
+           // this.depManager = depMan;
         }
 
         #endregion
@@ -159,7 +170,7 @@ namespace Theme11_Organization
         /// </summary>
         public void PrintDepToConsole()
         {
-            Console.WriteLine($"\nДепартамент № {depId}, Дата создания: {depCreationDate.ToShortDateString()}, менеджер: {depManager}");
+            Console.WriteLine($"\nДепартамент № {depId}, Дата создания: {depCreationDate.ToShortDateString()}");
             Console.WriteLine($"{titles[0],3} {titles[1],10} {titles[2],20} {titles[3],10} {titles[4],15}  {titles[5],15} {titles[6],10}");
             foreach (var item in employees)
             {
@@ -235,7 +246,7 @@ namespace Theme11_Organization
                 ["ID"] = this.DepId,
                 ["depName"] = this.DepName,
                 ["creationDate"] = this.CreationDate,
-                ["manager"] = this.depManager.FirstName + this.depManager.LastName
+                //["manager"] = this.depManager.FirstName + this.depManager.LastName
             };
             jDep["workers"] = jArray;
 
@@ -243,10 +254,35 @@ namespace Theme11_Organization
             return jDep;
         }
 
-        //public int ManagerSalaryCalculation()
-        //{
-        //    foreach (e Employee in wor)
-        //}
+        /// <summary>
+        /// Вычисление зарплаты менеджера департамента
+        /// </summary>
+        /// <returns>Зарплата менеджера</returns>
+        public double ManagerSalaryCalculation()
+        {
+            double managerSalary = 0;
+            foreach (var e in this.employees)
+            {
+                managerSalary =+ e.Salary;
+            }
+            managerSalary = managerSalary * 0.15;
+            return (managerSalary) < 1300 ? managerSalary : 1300;
+        
+        }
+
+        /// <summary>
+        /// Подсчёт количества проектов менеджера
+        /// </summary>
+        /// <returns>Кол-во проектов</returns>
+        public byte ManagerProjectsCountCalculation()
+        {
+            byte managerProjectsCount = 0;
+            foreach (var e in this.employees)
+            {
+                managerProjectsCount = (byte)(managerProjectsCount + e.ProjectsCount);
+            }
+            return managerProjectsCount;
+        }
         #endregion
     }
 }

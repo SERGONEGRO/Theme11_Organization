@@ -11,14 +11,14 @@ namespace Theme11_Organization
         /// <summary>
         /// Почасовая оплата
         /// </summary>
-        new public double Salary
+        new public uint Salary
         {
             get
             {
                 byte workingDays = 25; // Рабочих дней в месяце
                 byte workingHours = 8; // Рабочих часов в день
                 int salaryPerHour = 12; //12$ в час
-                return workingDays * workingHours * salaryPerHour;
+                return (uint)(workingDays * workingHours * salaryPerHour);
             }
         }
 
@@ -35,6 +35,7 @@ namespace Theme11_Organization
         public Worker(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
             :base (ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
+
         }
 
         /// <summary>

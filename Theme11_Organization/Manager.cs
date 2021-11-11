@@ -18,8 +18,13 @@ namespace Theme11_Organization
             {
                 return salary;
             }
+            
+            set
+            {
+                
+            }
         }
-        public Manager(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
+        public Manager(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount,double Salary)
             : base(ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
         }
