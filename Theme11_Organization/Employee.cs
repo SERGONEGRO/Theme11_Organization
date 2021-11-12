@@ -125,7 +125,7 @@ namespace Theme11_Organization
         /// <returns></returns>
         public string Print()
         {
-            return $"{this.id,5} {this.firstName,10} {this.lastName,20} {this.age,5} {this.department,20}  {this.salary,10} {this.projectsCount,8}";
+            return $"{this.id,5} {this.firstName,10} {this.lastName,20} {this.age,5} {this.department,20}  {this.salary,10} {this.projectsCount,8} {this.GetType().Name,10}";
         }
 
 

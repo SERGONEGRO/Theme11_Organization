@@ -19,7 +19,7 @@ namespace Theme11_Organization
                 return salary;
             }
             
-            set { }
+            set { this.salary = (uint)value; }
         }
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace Theme11_Organization
         /// <param name="Department"></param>
         /// <param name="ProjectsCount"></param>
         /// <param name=""></param>
-        public Manager(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
-            : base(ID, FirstName, LastName, Age, Department, ProjectsCount)
+        public Manager(uint ID, string FirstName, string LastName, byte Age, string Department,byte ProjectCount)
+            : base(ID, FirstName, LastName, Age, Department, ProjectCount)
         {
         }
 
