@@ -75,7 +75,7 @@ namespace Theme11_Organization
         /// <summary>
         /// Оплата труда
         /// </summary>
-        public uint Salary { get { return this.salary; } set { this.salary = value; } }
+        public virtual uint Salary { get { return this.salary; } set { this.salary = value; } }
 
         /// <summary>
         /// Количество проектов
@@ -106,6 +106,7 @@ namespace Theme11_Organization
             this.age = Age;
             this.department = Department;
             this.projectsCount = ProjectsCount;
+            this.salary = Salary;
         }
 
         /// <summary>

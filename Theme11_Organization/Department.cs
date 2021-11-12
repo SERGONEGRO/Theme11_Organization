@@ -138,8 +138,8 @@ namespace Theme11_Organization
                              $"Фамилия_{depNumber}",
                              (byte)r.Next(20, 100),
                             this.depName,
-                            ManagerProjectsCountCalculation(),
-                            ManagerSalaryCalculation()));
+                            ManagerProjectsCountCalculation()));
+                            //ManagerSalaryCalculation()));
            
 
         }
@@ -266,7 +266,7 @@ namespace Theme11_Organization
                 managerSalary =+ e.Salary;
             }
             managerSalary = managerSalary * 0.15;
-            return (managerSalary) < 1300 ? managerSalary : 1300;
+            return (uint)(managerSalary) < 1300 ? managerSalary : 1300;
         
         }
 

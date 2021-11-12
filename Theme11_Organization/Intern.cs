@@ -11,7 +11,7 @@ namespace Theme11_Organization
         /// <summary>
         /// Почасовая оплата
         /// </summary>
-        new public double Salary
+        new public uint Salary
         {
             get
             {
@@ -32,12 +32,13 @@ namespace Theme11_Organization
         public Intern(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
             : base(ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
+            this.salary = Salary;
         }
 
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
-        public Intern() : base() // this(1, "", "", 1, 1, "", 0)
+        public Intern() : base()
         {
         }
     }

@@ -19,17 +19,28 @@ namespace Theme11_Organization
                 return salary;
             }
             
-            set
-            {
-                
-            }
+            set { }
         }
-        public Manager(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount,double Salary)
+
+        /// <summary>
+        /// конструктор
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="FirstName"></param>
+        /// <param name="LastName"></param>
+        /// <param name="Age"></param>
+        /// <param name="Department"></param>
+        /// <param name="ProjectsCount"></param>
+        /// <param name=""></param>
+        public Manager(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
             : base(ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
         }
 
-        public Manager() : base() // this(1, "", "", 1, 1, "", 0)
+        /// <summary>
+        /// конструктор по умолчанию
+        /// </summary>
+        public Manager() : base() 
         {
         }
     }

@@ -19,29 +19,30 @@ namespace Theme11_Organization
                 byte workingHours = 8; // Рабочих часов в день
                 int salaryPerHour = 12; //12$ в час
                 return (uint)(workingDays * workingHours * salaryPerHour);
+                
             }
+            set { }
         }
 
         /// <summary>
-        /// Конструктор
+        /// конструктор
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="FirstName"></param>
         /// <param name="LastName"></param>
         /// <param name="Age"></param>
-        /// <param name="Salary"></param>
         /// <param name="Department"></param>
         /// <param name="ProjectsCount"></param>
         public Worker(uint ID, string FirstName, string LastName, byte Age, string Department, byte ProjectsCount)
             :base (ID, FirstName, LastName, Age, Department, ProjectsCount)
         {
-
+            this.salary = Salary ;
         }
 
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
-        public Worker() : base() // this(1, "", "", 1, 1, "", 0)
+        public Worker() : base() 
         {
         }
     }
