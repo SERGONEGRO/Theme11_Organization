@@ -16,6 +16,12 @@ namespace Theme11_Organization
         Department subDepartment;
 
         /// <summary>
+        /// уровень вложенности
+        /// </summary>
+        int subLevel = 0;
+
+
+        /// <summary>
         /// номер Департамента
         /// </summary>
         uint depId;
@@ -95,6 +101,7 @@ namespace Theme11_Organization
         /// <param name="empCount">количество работников</param>
         public Department(uint depNumber, int empCount)
         {
+            subLevel++;        //увеличиваем уровень вложенности
             Thread.Sleep(1);   //для разных значений генератора
             Random r = new Random(DateTime.Now.Millisecond);
             this.depId = depNumber;
@@ -122,12 +129,14 @@ namespace Theme11_Organization
             switch (rand.Next(0, 2))   //добавляем в департамент рандомно subDepartment
             {
                 case 0:
-                    subDepartment = new Department(depId * 10, rand.Next(5, 8));
+                    subDepartment = new Department(depId * 10, rand.Next(5, 8),subLevel);
                     break;
                 case 1:
                     break;
             }
         }
+
+        public Department() { }
 
         #endregion
 
@@ -164,7 +173,7 @@ namespace Theme11_Organization
             employees.Add(
                 new Intern(
                 (uint)(depnum * 1000 + iter),
-                $"Р_Имя_{iter}",
+                $"И_Имя_{iter}",
                 $"Фамилия_{iter}",
                 (byte)age,
                 this.depName,
