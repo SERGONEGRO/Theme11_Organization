@@ -50,6 +50,7 @@
     <Compile Include="Employee.cs" />
     <Compile Include="Intern.cs" />
     <Compile Include="Manager.cs" />
+    <Compile Include="Organization.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Worker.cs" />

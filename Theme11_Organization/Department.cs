@@ -231,6 +231,33 @@ namespace Theme11_Organization
             }
             return managerProjectsCount;
         }
+
+        /// <summary>
+        /// Департмент в Json
+        /// </summary>
+        /// <returns>объект JObject</returns>
+        public JObject SerializeDepartmentToJson()
+        {
+
+            JArray jArray = new JArray();
+            foreach (var w in this.employees)
+            {
+                JObject obj = w.SerializeEmployeeToJson();
+
+                jArray.Add(obj);
+            }
+
+            JObject jDep = new JObject
+            {
+                ["ID"] = this.DepId,
+                ["depName"] = this.DepName,
+                ["creationDate"] = this.CreationDate
+            };
+            jDep["workers"] = jArray;
+
+
+            return jDep;
+        }
         #endregion
     }
 }
