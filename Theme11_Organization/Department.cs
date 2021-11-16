@@ -18,7 +18,7 @@ namespace Theme11_Organization
         /// <summary>
         /// уровень вложенности
         /// </summary>
-        int subLevel = 0;
+        int subLevel;
 
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace Theme11_Organization
         /// </summary>
         /// <param name="depNumber">номер департамента</param>
         /// <param name="empCount">количество работников</param>
-        public Department(uint depNumber, int empCount)
+        public Department(uint depNumber, int empCount,int sl)
         {
-            subLevel++;        //увеличиваем уровень вложенности
+            this.subLevel = sl;
             Thread.Sleep(1);   //для разных значений генератора
             Random r = new Random(DateTime.Now.Millisecond);
             this.depId = depNumber;
@@ -129,7 +129,8 @@ namespace Theme11_Organization
             switch (rand.Next(0, 2))   //добавляем в департамент рандомно subDepartment
             {
                 case 0:
-                    subDepartment = new Department(depId * 10, rand.Next(5, 8),subLevel);
+                    //this.subLevel++;          //увеличиваем уровень вложенности
+                    subDepartment = new Department(depId * 10, rand.Next(5, 8), this.subLevel+1);
                     break;
                 case 1:
                     break;
@@ -185,12 +186,13 @@ namespace Theme11_Organization
         /// </summary>
         public void PrintDepToConsole()
         {
-            Console.WriteLine($"\nДепартамент № {depId}, Дата создания: {depCreationDate.ToShortDateString()}");
-            Console.WriteLine($"Менеджер: {this.depManager.LastName} {this.depManager.FirstName}, зарплата: {this.depManager.Salary}");
-            Console.WriteLine($"{titles[0],3} {titles[1],10} {titles[2],20} {titles[3],10} {titles[4],15}  {titles[5],15} {titles[6],10}");
+            string addSpace = new string(' ',this.subLevel*5);  //вставляем пробелы, кол-во = уровню вложенности*5
+            Console.WriteLine($"\n{addSpace}Департамент № {depId}, Дата создания: {depCreationDate.ToShortDateString()}, SubLevel: {this.subLevel}");
+            Console.WriteLine($"{addSpace}Менеджер: {this.depManager.LastName} {this.depManager.FirstName}, зарплата: {this.depManager.Salary}");
+            Console.WriteLine($"{addSpace}{titles[0],3} {titles[1],10} {titles[2],20} {titles[3],10} {titles[4],15}  {titles[5],15} {titles[6],10}");
             foreach (var item in employees)
             {
-                Console.WriteLine(item.Print());
+                Console.WriteLine($"{addSpace}{item.Print()}");
             }
             if (this.subDepartment !=null)
             {

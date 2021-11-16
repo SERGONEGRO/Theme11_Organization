@@ -16,7 +16,7 @@ namespace Theme11_Organization
             List<Department> deps = new List<Department>();            //заполняем департаменты
             for (uint i = 0; i < depsIndex; i++)
             {
-                deps.Add(new Department(i + 1, rand.Next(5, 8)));
+                deps.Add(new Department(i + 1, rand.Next(5, 8),0));
             }
 
             for (int i = 0; i < deps.Count; i++)
