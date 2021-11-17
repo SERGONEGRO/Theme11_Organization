@@ -247,12 +247,28 @@ namespace Theme11_Organization
                 jArray.Add(obj);
             }
 
-            JObject jDep = new JObject
+            JObject jDep;
+            if (this.subDepartment != null)
             {
-                ["ID"] = this.DepId,
-                ["depName"] = this.DepName,
-                ["creationDate"] = this.CreationDate
-            };
+                jDep = new JObject
+                {
+                    ["ID"] = this.DepId,
+                    ["DEPNAME"] = this.DepName,
+                    ["CREATIONDATE"] = this.CreationDate,
+                    ["MANAGER"] = this.depManager.FirstName + " " + this.depManager.LastName,
+                    ["SUBDEPARTMENT"] = this.subDepartment.SerializeDepartmentToJson()
+                };
+            }
+            else
+            {
+                jDep = new JObject
+                {
+                    ["ID"] = this.DepId,
+                    ["DEPNAME"] = this.DepName,
+                    ["CREATIONDATE"] = this.CreationDate,
+                    ["MANAGER"] = this.depManager.FirstName + " " + this.depManager.LastName,
+                };
+            }
             jDep["workers"] = jArray;
 
 
