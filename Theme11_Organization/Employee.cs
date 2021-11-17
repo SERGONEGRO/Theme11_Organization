@@ -143,7 +143,8 @@ namespace Theme11_Organization
                 ["Age"] = this.Age,
                 ["Salary"] = this.Salary,
                 ["Department"] = this.Department,
-                ["ProjectCount"] = this.ProjectsCount
+                ["ProjectCount"] = this.ProjectsCount,
+                ["TYPE"] = this.GetType().Name
             };
             return jEmployee;
         }

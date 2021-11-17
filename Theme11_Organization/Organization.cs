@@ -21,13 +21,17 @@ namespace Theme11_Organization
         /// <summary>
         /// конструктор
         /// </summary>
-        public Organization()
+        public Organization(int depsCount)
         {
-            for (uint i = 0; i < depsIndex; i++)
+            for (uint i = 0; i < depsCount; i++)
             {
                 deps.Add(new Department(i + 1, rand.Next(5, 8), 0));
             }
         }
+        public Organization()
+        {
+        }
+
 
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace Theme11_Organization
 
 
         /// <summary>
-        /// Экспорт в json - доработать
+        /// Экспорт в json
         /// </summary>
         public void OrganizationToJSON()
         {
@@ -64,6 +68,27 @@ namespace Theme11_Organization
 
             string json = mainTree.ToString();
             File.WriteAllText("OrganizationExport.json", json);
+        }
+
+
+        /// <summary>
+        /// Импорт из JSON
+        /// </summary>
+        static public Organization JsonToOrganization()
+        {
+            Organization org = new Organization();
+            org.deps.Clear();
+            org.depsIndex = 0;
+
+            string json = System.IO.File.ReadAllText("OrganizationExport.json");
+
+            var departments = JObject.Parse(json)["Departments"].ToArray();
+
+            foreach (var item in departments)
+            {
+                org.deps.Add(Department.AddDepartment(item.ToString()));
+            }
+            return org;
         }
     }
 }

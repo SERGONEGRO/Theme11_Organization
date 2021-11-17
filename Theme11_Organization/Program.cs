@@ -11,12 +11,13 @@ namespace Theme11_Organization
     {
         static void Main(string[] args)
         {
-            Organization TheBestCoders = new Organization();
+            //Organization TheBestCoders = new Organization(5);
+            Organization TheBestCoders = Organization.JsonToOrganization();
             
             TheBestCoders.PrintOrganizationToConsole();
 
-            TheBestCoders.OrganizationToJSON();
-            Console.WriteLine("Экспорт завершен!\n");
+            //TheBestCoders.OrganizationToJSON();
+            //Console.WriteLine("Экспорт завершен!\n");
 
         }
 

@@ -137,7 +137,41 @@ namespace Theme11_Organization
             }
         }
 
-        public Department() { }
+        /// <summary>
+        /// Конструктор, собирающий департамент, используется для импорта из XML и JSON
+        /// </summary>
+        /// <param name="depNumber">ID департамента</param>
+        /// <param name="depName">Имя департамента</param>
+        /// <param name="depDate">Дата создания</param>
+        /// <param name="works">Массив воркеров</param>
+        public Department(int sl,int depNumber, string depName, string depDate, string mngr, List<Employee> works,string sb)
+        {
+            this.subLevel = sl;
+            this.depId = (uint)depNumber;
+            this.depName = depName;
+            this.depCreationDate = DateTime.Parse(depDate);
+            this.titles = new string[7] { "id", "Имя", "Фамилия", "Возраст", "Департамент", "Зарплата", "Проектов", };
+            this.employees = works;
+            if(sb!=null)
+            this.subDepartment = AddDepartment(sb);
+
+        }
+
+       
+        static public Department AddDepartment(string s)
+        {
+            var item = JObject.Parse(s);
+            Department dep = new Department(Convert.ToUInt16(item["SUBLEVEL"]),
+                                                 Convert.ToInt32(item["ID"]),
+                                                 item["DEPNAME"].ToString(),
+                                                 item["CREATIONDATE"].ToString(),
+                                                 item["MANAGER"].ToString(),
+                                                 GetEmployeeJSON(item["Wo"].ToString()),
+                                                 item["SUBDEPARTMENT"].ToString());
+
+
+            return dep;
+        }
 
         #endregion
 
@@ -238,7 +272,6 @@ namespace Theme11_Organization
         /// <returns>объект JObject</returns>
         public JObject SerializeDepartmentToJson()
         {
-
             JArray jArray = new JArray();
             foreach (var w in this.employees)
             {
@@ -248,31 +281,67 @@ namespace Theme11_Organization
             }
 
             JObject jDep;
-            if (this.subDepartment != null)
+            if (this.subDepartment != null)  //если есть вложенный департмент
             {
                 jDep = new JObject
                 {
+                    ["SUBLEVEL"] = this.subLevel,
                     ["ID"] = this.DepId,
                     ["DEPNAME"] = this.DepName,
                     ["CREATIONDATE"] = this.CreationDate,
-                    ["MANAGER"] = this.depManager.FirstName + " " + this.depManager.LastName,
+                    ["MANAGER"] = this.depManager.LastName + " " + this.depManager.FirstName,
+                    ["WORKERS"] = jArray,
                     ["SUBDEPARTMENT"] = this.subDepartment.SerializeDepartmentToJson()
                 };
             }
-            else
+            else                            //Если нет вложенного департмента
             {
                 jDep = new JObject
                 {
+                    ["SUBLEVEL"] = this.subLevel,
                     ["ID"] = this.DepId,
                     ["DEPNAME"] = this.DepName,
                     ["CREATIONDATE"] = this.CreationDate,
                     ["MANAGER"] = this.depManager.FirstName + " " + this.depManager.LastName,
+                    ["WORKERS"] = jArray
                 };
             }
-            jDep["workers"] = jArray;
-
-
             return jDep;
+        }
+
+
+        /// <summary>
+        /// Распарсивает JSON строку в массив воркеров
+        /// </summary>
+        /// <param name="s">Строка</param>
+        /// <returns>массив воркеров</returns>
+        public static List<Employee> GetEmployeeJSON(string s)
+        {
+            var wrks = JObject.Parse(s)["workers"].ToArray();
+
+            List<Employee> workers = new List<Employee>();
+            foreach (var item in wrks)
+            {
+                if (item["TYPE"].ToString() == "Worker")
+                {
+                    workers.Add(new Worker(Convert.ToUInt32(item["ID"]),
+                                           item["FirstName"].ToString(),
+                                           item["LastName"].ToString(),
+                                           Convert.ToByte(item["Age"]),
+                                           item["Department"].ToString(),
+                                           Convert.ToByte(item["ProjectCount"])));
+                }
+                else
+                {
+                    workers.Add(new Intern(Convert.ToUInt32(item["ID"]),
+                                           item["FirstName"].ToString(),
+                                           item["LastName"].ToString(),
+                                           Convert.ToByte(item["Age"]),
+                                           item["Department"].ToString(),
+                                           Convert.ToByte(item["ProjectCount"])));
+                }
+            }
+            return workers;
         }
         #endregion
     }
