@@ -119,7 +119,6 @@ namespace Theme11_Organization
             switch (rand.Next(0, 2))   //добавляем в департамент рандомно subDepartment
             {
                 case 0:
-                    //this.subLevel++;          //увеличиваем уровень вложенности
                     subDepartment = new Department(depId * 10, rand.Next(5, 8), this.subLevel+1);
                     break;
                 case 1:
