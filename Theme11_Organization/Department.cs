@@ -20,7 +20,6 @@ namespace Theme11_Organization
         /// </summary>
         int subLevel;
 
-
         /// <summary>
         /// номер Департамента
         /// </summary>
@@ -65,11 +64,6 @@ namespace Theme11_Organization
 
         #region Свойства
 
-        ///// <summary>
-        ///// Индекс
-        ///// </summary>
-        //public int Index { get { return this.index; } set { this.index = value; } }
-
         /// <summary>
         /// Название
         /// </summary>
@@ -85,20 +79,16 @@ namespace Theme11_Organization
         /// </summary>
         public DateTime CreationDate { get { return this.depCreationDate; } set { this.depCreationDate = value; } }
 
-        ///// <summary>
-        ///// Количество работников
-        ///// </summary>
-        //public int WorkersCount { get { return this.index; } }
-
         #endregion
 
-        #region Конструктор
+        #region Конструкторы
 
         /// <summary>
-        /// Конструктор 
+        /// Конструктор Основной
         /// </summary>
-        /// <param name="depNumber">номер департамента</param>
-        /// <param name="empCount">количество работников</param>
+        /// <param name="depNumber">Номер департамента</param>
+        /// <param name="empCount">Кол-во работников</param>
+        /// <param name="sl">Sub Level - степень вложенности</param>
         public Department(uint depNumber, int empCount,int sl)
         {
             this.subLevel = sl;
@@ -137,13 +127,17 @@ namespace Theme11_Organization
             }
         }
 
+
         /// <summary>
-        /// Конструктор, собирающий департамент, используется для импорта из XML и JSON
+        /// Конструктор, собирающий департамент C ВЛОженным департаментом, используется для импорта из XML и JSON
         /// </summary>
-        /// <param name="depNumber">ID департамента</param>
-        /// <param name="depName">Имя департамента</param>
+        /// <param name="sl">Степень вложенности</param>
+        /// <param name="depNumber">номер</param>
+        /// <param name="depName">Название</param>
         /// <param name="depDate">Дата создания</param>
-        /// <param name="works">Массив воркеров</param>
+        /// <param name="mngr">ФИО Менеджера</param>
+        /// <param name="works">Строка с работягами</param>
+        /// <param name="sb">Строка с сабдепартментом</param>
         public Department(int sl,int depNumber, string depName, string depDate, string mngr, List<Employee> works,string sb)
         {
             this.subLevel = sl;
@@ -155,27 +149,77 @@ namespace Theme11_Organization
             if(sb!=null)
             this.subDepartment = AddDepartment(sb);
 
+            depManager = new Manager();
+            string[] name = mngr.Split(' ');
+            this.depManager.LastName = name[1];
+            this.depManager.FirstName = name[0];
+            ManagerSalaryCalculation();
         }
 
-       
-        static public Department AddDepartment(string s)
+
+        /// <summary>
+        /// Конструктор, собирающий департамент БЕЗ вложенного департамента, используется для импорта из XML и JSON
+        /// </summary>
+        /// <param name="sl">Степень вложенности</param>
+        /// <param name="depNumber">номер</param>
+        /// <param name="depName">Название</param>
+        /// <param name="depDate">Дата создания</param>
+        /// <param name="mngr">ФИО Менеджера</param>
+        /// <param name="works">Строка с работягами</param>
+        public Department(int sl, int depNumber, string depName, string depDate, string mngr, List<Employee> works)
         {
-            var item = JObject.Parse(s);
-            Department dep = new Department(Convert.ToUInt16(item["SUBLEVEL"]),
-                                                 Convert.ToInt32(item["ID"]),
-                                                 item["DEPNAME"].ToString(),
-                                                 item["CREATIONDATE"].ToString(),
-                                                 item["MANAGER"].ToString(),
-                                                 GetEmployeeJSON(item["Wo"].ToString()),
-                                                 item["SUBDEPARTMENT"].ToString());
+            
+            this.subLevel = sl;
+            this.depId = (uint)depNumber;
+            this.depName = depName;
+            this.depCreationDate = DateTime.Parse(depDate);
+            this.titles = new string[7] { "id", "Имя", "Фамилия", "Возраст", "Департамент", "Зарплата", "Проектов", };
+            this.employees = works;
 
-
-            return dep;
+            depManager = new Manager();
+            string[] name = mngr.Split(' ');
+            this.depManager.LastName = name[1];
+            this.depManager.FirstName = name[0];
+            ManagerSalaryCalculation();
         }
 
         #endregion
 
         #region Методы
+
+        /// <summary>
+        /// Добавляет Департамент. Если есть Сабдепартамент, то вызывает рекурсивно конструктор
+        /// </summary>
+        /// <param name="s">Строка, которую нужно распарсить</param>
+        /// <returns></returns>
+        static public Department AddDepartment(string s)
+        {
+            var item = JObject.Parse(s);
+            Department dep;
+            if (item["SUBDEPARTMENT"] != null)
+            {       ///в зависимости от наличия сабдепартмента вызываются разные конструкторы
+                dep = new Department(Convert.ToUInt16(item["SUBLEVEL"]),
+                                                     Convert.ToInt32(item["ID"]),
+                                                     item["DEPNAME"].ToString(),
+                                                     item["CREATIONDATE"].ToString(),
+                                                     item["MANAGER"].ToString(),
+                                                     GetEmployeeJSON(item.ToString()),
+                                                     item["SUBDEPARTMENT"].ToString());
+            }
+            else
+            {
+                dep = new Department(Convert.ToUInt16(item["SUBLEVEL"]),
+                                                     Convert.ToInt32(item["ID"]),
+                                                     item["DEPNAME"].ToString(),
+                                                     item["CREATIONDATE"].ToString(),
+                                                     item["MANAGER"].ToString(),
+                                                     GetEmployeeJSON(item.ToString()));
+
+            }
+
+            return dep;
+        }
+
 
         /// <summary>
         /// Добавить Работягу
@@ -196,6 +240,7 @@ namespace Theme11_Organization
                 (byte)pc));
         }
 
+
         /// <summary>
         /// Добавить Интерна
         /// </summary>
@@ -214,6 +259,7 @@ namespace Theme11_Organization
                 this.depName,
                 (byte)pc));
         }
+
 
         /// <summary>
         /// Печать в консоль
@@ -234,6 +280,7 @@ namespace Theme11_Organization
             }
         }
 
+
         /// <summary>
         /// Вычисление зарплаты менеджера департамента
         /// </summary>
@@ -248,9 +295,8 @@ namespace Theme11_Organization
             
             managerSalary = managerSalary * 0.15;
             this.depManager.Salary = (uint)(managerSalary) >= 1300 ? managerSalary : 1300;
-            //return 
-        
         }
+
 
         /// <summary>
         /// Подсчёт количества проектов менеджера
@@ -265,6 +311,7 @@ namespace Theme11_Organization
             }
             return managerProjectsCount;
         }
+
 
         /// <summary>
         /// Департмент в Json
@@ -317,7 +364,7 @@ namespace Theme11_Organization
         /// <returns>массив воркеров</returns>
         public static List<Employee> GetEmployeeJSON(string s)
         {
-            var wrks = JObject.Parse(s)["workers"].ToArray();
+            var wrks = JObject.Parse(s)["WORKERS"].ToArray();
 
             List<Employee> workers = new List<Employee>();
             foreach (var item in wrks)

@@ -13,14 +13,15 @@ namespace Theme11_Organization
         #region поля
 
         Random rand = new Random();
-        int depsIndex = 5;                      //количество департаментов
+        int depsIndex;                     //количество департаментов
         List<Department> deps = new List<Department>();    
 
         #endregion
 
         /// <summary>
-        /// конструктор
+        /// Конструктор
         /// </summary>
+        /// <param name="depsCount">Количество департаментов</param>
         public Organization(int depsCount)
         {
             for (uint i = 0; i < depsCount; i++)
@@ -28,10 +29,14 @@ namespace Theme11_Organization
                 deps.Add(new Department(i + 1, rand.Next(5, 8), 0));
             }
         }
+
+
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
         public Organization()
         {
         }
-
 
 
         /// <summary>
@@ -72,8 +77,9 @@ namespace Theme11_Organization
 
 
         /// <summary>
-        /// Импорт из JSON
+        /// Импорт из файла
         /// </summary>
+        /// <returns>Организация</returns>
         static public Organization JsonToOrganization()
         {
             Organization org = new Organization();

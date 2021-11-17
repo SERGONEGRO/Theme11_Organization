@@ -11,13 +11,28 @@ namespace Theme11_Organization
     {
         static void Main(string[] args)
         {
-            //Organization TheBestCoders = new Organization(5);
-            Organization TheBestCoders = Organization.JsonToOrganization();
+            /* Создаем организацию, Печатаем, экспортируем. Потом импортируем и снова печатаем для наглядности*/
+
+            //создание организации автоматической генерацией:
+            Organization TheBestCoders = new Organization(5);
+
+            //Создание организации чтением из файла:
+            //Organization TheBestCoders = Organization.JsonToOrganization();
+
             
             TheBestCoders.PrintOrganizationToConsole();
+            
 
-            //TheBestCoders.OrganizationToJSON();
-            //Console.WriteLine("Экспорт завершен!\n");
+            //Экспорт в JSON
+            TheBestCoders.OrganizationToJSON();
+            Console.WriteLine("Экспорт завершен!\n");
+
+            //Чтение из файла
+            TheBestCoders = Organization.JsonToOrganization();
+
+            TheBestCoders.PrintOrganizationToConsole();
+           
+
 
         }
 
